@@ -35,7 +35,7 @@ function App() {
   const [board, setBoard] = useState(Array(9).fill(null))
 
   const [turn, setTurn] = useState(TURNS.X)
-  const [winner, setWinner] = useState(null) // Null no hay ganador y fall es que hay un empate
+  const [winner, setWinner] = useState(null) // Null no hay ganador y false es que hay un empate
 
   const checkWinner = (boardToCheck) => {
     // Revisamos todas las combinaciones ganadoras a ver si 'x' o 'o' ganan
@@ -51,6 +51,13 @@ function App() {
     // Si no hay ganador 
     return null
   }
+
+  const resetGame = () => {
+    setBoard(Array(9).fill(null))
+    setTurn(TURNS.X)
+    setWinner(null)
+  }
+
   const updateBoard = (index) => {
     //No permitimos que sobre escriba si alguno ya utilizo esa cacilla
     if (board[index] || winner) return
@@ -71,6 +78,7 @@ function App() {
   return (
     <main className='board'>
       <h1>Juego de la vieja</h1>
+      <button onClick={resetGame}>Reset Game</button>
       <section className='game'>
         {
           board.map((_,index) => {
@@ -90,6 +98,26 @@ function App() {
         <Square isSelected={turn === TURNS.X}>{TURNS.X}</Square>
         <Square isSelected={turn === TURNS.O}>{TURNS.O}</Square>
       </section>
+      {
+        winner !== null && (
+          <section className='winner'>
+            <div className='text'>
+              <h2>
+                {
+                  winner === false 
+                  ? 'Empate'
+                  : 'Gano: '
+                }
+              </h2>
+              <header className='win'>
+                {winner && <Square>{winner}</Square>}
+              </header>
+
+              <button onClick={resetGame}>Empezar de nuevo</button>
+            </div>
+          </section>
+        )
+      }
     </main>
   )
 }
